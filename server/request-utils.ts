@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest } from "next";
 import { DecodedIdToken, getAuth } from "firebase-admin/auth";
-import Cors from "cors";
 import https, { RequestOptions } from "https";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
@@ -72,39 +71,9 @@ export function initFirebase() {
   return getApps()[0];
 }
 
-// Helper method to wait for a middleware to execute before continuing
-// And to throw an error when an error happens in a middleware
-export default function cors(req: NextApiRequest, res: NextApiResponse) {
-  initFirebase();
-  return new Promise((resolve, reject) => {
-    Cors({
-      // Only allow requests with GET, POST and OPTIONS
-      methods: ["GET", "POST", "OPTIONS"],
-    })(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-
-      return resolve(result);
-    });
-  });
-}
-
 export const ERROR_CODES: any = {
   "auth/invalid-phone-number": "phoneNumber",
 };
-
-export function handleError(
-  req: NextApiRequest,
-  res: NextApiResponse,
-  error: any
-) {
-  const { code, message } = error;
-  logError(req.query, error);
-  res.json({
-    error: { code: ERROR_CODES[code] || code, message },
-  });
-}
 
 export function sendGetRequest(
   host: string,
