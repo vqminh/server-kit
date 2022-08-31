@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { DEV } from "../settings";
+import { DEV } from "../shared/settings";
 
 interface Environment {
   error(...args: any[]): void;

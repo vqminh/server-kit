@@ -5,9 +5,9 @@ import https, { RequestOptions } from "https";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import http from "http";
-import { generateId, timeStamp } from "../../shared/utils/id";
+import { generateId, timeStamp } from "../shared/id";
 import stream from "stream";
-import { PROJECT_ID } from "../settings";
+import { PROJECT_ID } from "../shared/settings";
 import { info, logError } from "./env";
 
 export function verifyAdmin(auth: DecodedIdToken) {

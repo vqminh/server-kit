@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
-import { User, userDot, USERS } from "../user";
+import { User, userDot, USERS } from "../shared/user";
 import { ConfigV3, getMe, getMeV4, sendZaloMessage } from "./zalo";
 import { logError } from "../server/env";
 import { checkAdmin, checkUser } from "../server/express-utils";
