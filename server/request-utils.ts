@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import { DecodedIdToken, getAuth } from "firebase-admin/auth";
 import https, { RequestOptions } from "https";
 import { cert, getApps, initializeApp } from "firebase-admin/app";
@@ -15,17 +14,6 @@ export function verifyAdmin(auth: DecodedIdToken) {
   } else {
     throw new Error("Unauthorized: " + auth.uid);
   }
-}
-
-export async function checkUser(req: NextApiRequest) {
-  const token = req.headers["token"] as string;
-  let decoded = await verifyToken(token);
-  return decoded.uid;
-}
-
-export function checkAdmin(req: NextApiRequest) {
-  const token = req.headers["token"] as string;
-  return checkAdminToken(token);
 }
 
 export function verifyToken(token?: string) {
