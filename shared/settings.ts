@@ -1,4 +1,3 @@
-export const IS_SERVER = typeof window === "undefined";
 export const DEV = process.env.NODE_ENV !== "production";
 export const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 export const REGION = process.env.NEXT_PUBLIC_REGION as string;
