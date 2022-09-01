@@ -24,7 +24,7 @@ export function useZalo(app: Express, config?: ConfigV3) {
     try {
       const json = version ? await getMeV4(code) : await getMe(code, config!);
       if (!json?.id) {
-        logError("access_token", code, JSON.stringify(json));
+        logError("access_token", version, code, JSON.stringify(json));
         throw new Error("Invalid access token");
       }
       const { id, name, picture, birthday, gender } = json;
