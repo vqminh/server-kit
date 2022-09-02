@@ -3,17 +3,16 @@ import cors from "cors";
 import { checkAdminToken, ERROR_CODES, verifyToken } from "./request-utils";
 import { info, logError } from "./env";
 
-function handleError(req: express.Request, res: express.Response, error: any) {
-  const { code } = error;
-  logError(req.body, error);
-  res.status(500).send(ERROR_CODES[code] || code);
-}
-
 const errorMiddleware = (
   error: Error,
   req: express.Request,
-  res: express.Response
-) => handleError(req, res, error);
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  logError(req.body, error);
+  const { code } = error as any;
+  res.status(500).send(ERROR_CODES[code] || code || error.message);
+};
 
 export function useDefault() {
   const app = express();
