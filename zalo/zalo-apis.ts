@@ -14,14 +14,13 @@ import { sendGetRequest } from "../server/request-utils";
  */
 export function useZalo(app: Express, config?: ConfigV3) {
   /** https://developers.zalo.me/docs/api/social-api/tai-lieu/thong-tin-nguoi-dung-post-28 **/
-  app.get("/zalo/login/:version?", async (req, res) => {
-    const code = req.query.code as string;
+  app.post("/zalo/login/:version?", async (req, res) => {
+    const code = req.body.code as string;
     const { version } = req.params;
     if (!code) {
       throw new Error("Could not get code from: " + req.url);
     }
 
-    try {
       const json = version ? await getMeV4(code) : await getMe(code, config!);
       if (!json?.id) {
         logError("access_token", version, code, JSON.stringify(json));
@@ -52,10 +51,6 @@ export function useZalo(app: Express, config?: ConfigV3) {
       }
       const token = await getAuth().createCustomToken(uid);
       res.json({ token });
-    } catch (e: any) {
-      logError(req.path, e);
-      res.json({ error: e.message });
-    }
   });
 
   app.post("/zalo/opt_out", async (req, res) => {
@@ -77,7 +72,7 @@ export function useZalo(app: Express, config?: ConfigV3) {
     const uid = req.query.state as string;
     const zalo_uid = req.query.uid;
     const response = await sendGetRequest(
-      "openapi.zalo.me", `/v2.0/oa/getprofile?access_token=${access_token}&data={"user_id":"${zalo_uid}"}`
+      "openapi.zalo.me", `/v2.0/oa/getprofile?access_token=${encodeURI(access_token)}&data={"user_id":"${zalo_uid}"}`
     );
     const data = response.data;
     if (!!data) {
