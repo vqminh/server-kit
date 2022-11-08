@@ -10,8 +10,10 @@ const errorMiddleware = (
   next: express.NextFunction
 ) => {
   logError(req.body, error);
-  const { code } = error as any;
-  res.status(500).send(ERROR_CODES[code] || code || error.message);
+  const { code, message } = error as any;
+  res.send({
+    error: code ? ERROR_CODES[code] || code : message
+  });
 };
 
 export function useDefault() {
@@ -29,6 +31,7 @@ export function useDefault() {
     }
     next();
   });
+  app.use(errorMiddleware);
 
   app.post("/error", (req, res) => {
     logError(JSON.stringify(req.body));
@@ -39,8 +42,6 @@ export function useDefault() {
     info(process.env);
     res.json({});
   });
-
-  app.use(errorMiddleware);
 
   return app;
 }
